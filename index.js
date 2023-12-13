@@ -40,7 +40,7 @@ app.get("/books/", async (request, response) => {
 });
 
 //Get Book API
-app.get("/books/:bookId/", async (request, response) => {
+app.get("/books/:bookId", async (request, response) => {
   const { bookId } = request.params;
   const getBookQuery = `
     SELECT 
@@ -125,7 +125,7 @@ app.put("/books/:bookId/", async (request, response) => {
       online_stores='${onlineStores}'
     WHERE
       book_id = ${bookId};`;
-  await db.run(updateBookQuery);
+  const responsedb = await db.run(updateBookQuery);
   response.send("Book updated successfully");
 });
 
@@ -137,7 +137,7 @@ app.delete("/books/:bookId/", async (request, response) => {
         book
     WHERE
         book_id = ${bookId};`;
-  await db.run(deleteBookQuery);
+  const book = await db.run(deleteBookQuery);
   response.send("Book Deleted Successfully");
 });
 
@@ -154,3 +154,5 @@ app.get("/authors/:authorId/books/", async (request, response) => {
   const booksArray = await db.all(getAuthorBooksQuery);
   response.send(booksArray);
 });
+
+module.exports = app;
